@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+!src/core/dist/
+!src/core/dist/**
+build/
+out/
+coverage/
+.next/
+.nuxt/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# CI deployment artifact
+.github/deploy/site/
+
+# Local maintenance and reference files
+AGENTS.md
+res/
+bridge/
+
+# Legacy bridge-based video recorders
+scripts/record-demo.cjs
+scripts/record-features.cjs

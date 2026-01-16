@@ -1,0 +1,17 @@
+{
+  "name": "@neo-jack/aitool",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Select web elements and copy prompts, screenshots and source locations",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neo-jack/101my-agent.git"
+  },
+  "scripts": {
+    "build": "node src/core/build.js",
+    "preview": "node scripts/preview.mjs",
+    "test": "node --test src/core/context/source.test.mjs src/core/actions/screenshot.test.mjs src/core/actions/copy.test.mjs",
+    "test:figma": "npm exec --yes --package=playwright -- node src/core/vendor/figma-capture.test.cjs"
+  }
+}
