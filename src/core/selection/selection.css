@@ -1,0 +1,217 @@
+/* ── Hover box ───────────────────────────────────────────── */
+.ai-editor-hover-box {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2147483640;
+  border: 1.5px dashed rgba(0, 0, 0, 0.22);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.03);
+  opacity: 0;
+  transition: opacity 80ms ease;
+}
+
+/* ── Selection box ───────────────────────────────────────── */
+@keyframes ai-editor-sel-in {
+  from { opacity: 0; transform: scale(1.05); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.ai-editor-sel-box {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2147483641;
+  border: 2px solid #111;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.04);
+  opacity: 0;
+  transform-origin: center;
+  animation: ai-editor-sel-in 180ms cubic-bezier(0.2, 0, 0.1, 1) forwards;
+}
+
+/* ── Corner handles ──────────────────────────────────────── */
+@keyframes ai-editor-corner-in {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.ai-editor-sel-corner {
+  position: fixed;
+  width: 7px;
+  height: 7px;
+  background: #111;
+  border: 1.5px solid #fff;
+  border-radius: 1.5px;
+  pointer-events: none;
+  z-index: 2147483642;
+  opacity: 0;
+  transform-origin: center;
+  animation: ai-editor-corner-in 220ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Label ───────────────────────────────────────────────── */
+@keyframes ai-editor-label-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ai-editor-sel-label {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2147483643;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: #111;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: ai-editor-label-in 180ms ease forwards;
+}
+
+/* ── Annotate button (per-element) ───────────────────────── */
+.ai-editor-annotate-btn {
+  white-space: nowrap !important;
+  word-break: normal !important;
+  writing-mode: horizontal-tb !important;
+  min-width: 20px !important;
+  max-width: none !important;
+  min-height: 20px !important;
+  max-height: 20px !important;
+  margin: 0 !important;
+  position: fixed;
+  z-index: 2147483643;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: #333;
+  color: #aaa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  opacity: 0;
+  animation: ai-editor-label-in 180ms ease forwards;
+  transition: background 100ms, color 100ms;
+}
+
+.ai-editor-annotate-btn:hover {
+  background: #555;
+  color: #fff;
+}
+
+.ai-editor-annotate-btn.ai-editor-has-note {
+  background: #2563eb;
+  color: #fff;
+}
+
+.ai-editor-annotate-btn.ai-editor-has-note:hover {
+  background: #1d4ed8;
+}
+
+/* ── Annotation popover ──────────────────────────────────── */
+.ai-editor-annotate-popover {
+  position: fixed;
+  z-index: 2147483646;
+  width: 240px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  user-select: text;
+}
+
+.ai-editor-annotate-input {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  resize: none;
+  outline: none;
+  background: #fafafa;
+  color: #1a1a1a;
+  font-family: inherit;
+  transition: border-color 150ms;
+}
+
+.ai-editor-annotate-input:focus {
+  border-color: #111;
+  background: #fff;
+}
+
+.ai-editor-annotate-input::placeholder {
+  color: #bbb;
+}
+
+.ai-editor-annotate-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.ai-editor-annotate-done,
+.ai-editor-annotate-clear {
+  border: none;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 100ms;
+}
+
+.ai-editor-annotate-add,
+.ai-editor-annotate-done {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-editor-annotate-done {
+  background: #111;
+  color: #fff;
+}
+
+.ai-editor-annotate-done:hover {
+  background: #333;
+}
+
+.ai-editor-annotate-clear {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.ai-editor-annotate-clear:hover {
+  background: #e0e0e0;
+}
+
+/* ── Marquee (drag to select) ────────────────────────────── */
+.ai-editor-marquee {
+  position: fixed;
+  border: 1.5px dashed #555;
+  background: rgba(100, 120, 255, 0.06);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2147483645;
+}
+
+.ai-editor-annotate-btn.ai-editor-ignore-btn { width: 44px !important; min-width: 44px !important; font-size: 11px !important; }
+.ai-editor-annotate-btn.ai-editor-selection-close-btn { font-size: 16px; }
+.ai-editor-annotate-btn.ai-editor-new-chat-btn { width: 64px !important; min-width: 64px !important; font-size: 11px !important; }
+.ai-editor-new-chat-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ai-editor-annotate-btn.ai-editor-add-content-btn { width: 64px !important; min-width: 64px !important; font-size: 11px !important; }
+.ai-editor-add-content-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ai-editor-annotate-btn.ai-editor-submit-btn { font-size: 16px; color: #fff; }
+.ai-editor-submit-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ai-editor-sel-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ai-editor-annotate-btn.ai-editor-source-btn { width: 44px !important; min-width: 44px !important; font-size: 11px !important; }
+.ai-editor-source-btn:disabled { opacity: .45; cursor: wait; }
+
+.ai-editor-annotate-btn.ai-editor-icon-action { width: 25px !important; min-width: 25px !important; height: 23px !important; padding: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+.ai-editor-icon-action svg { width: 14px !important; height: 14px !important; pointer-events: none; }
