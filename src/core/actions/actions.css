@@ -1,0 +1,206 @@
+/* ── Action buttons ──────────────────────────────────────── */
+.ai-editor-action-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 6px 8px 8px;
+}
+
+.ai-editor-copy-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 8px 0;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 150ms, transform 100ms;
+}
+
+.ai-editor-copy-btn:hover {
+  background: #333;
+}
+
+.ai-editor-copy-btn:active {
+  transform: scale(0.97);
+}
+
+.ai-editor-copy-btn:disabled {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: default;
+  transform: none;
+}
+
+.ai-editor-copy-btn.ai-editor-copy-done {
+  background: #16a34a;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  gap: 4px;
+}
+
+.ai-editor-copy-btn.ai-editor-copy-done * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.ai-editor-copy-btn.ai-editor-copy-error {
+  background: #dc2626;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* Analyzing an image (⌘I) — a smooth sheen sweeps across the Copy button (流光). */
+.ai-editor-copy-btn.ai-editor-copy-loading {
+  cursor: default;
+  /* !important so the 流光 sheen always wins — over the button's own :disabled
+     state AND over any aggressive button styles on the host page (a page rule
+     like `button:disabled{background:#e0e0e0!important}` was repainting it grey,
+     which is why the sheen sometimes vanished on real sites). */
+  color: #fff !important;
+  background-color: #111 !important;
+  background-image: linear-gradient(100deg, #111 0%, #111 42%, #6a6a6a 50%, #111 58%, #111 100%) !important;
+  background-size: 250% 100% !important;
+  animation: ai-editor-rev-sheen 1.15s linear infinite !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-editor-copy-btn.ai-editor-copy-loading { animation: none; }
+}
+
+.ai-editor-copy-btn .ai-editor-sharingan-icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Copy Screenshot button ─────────────────────────────── */
+.ai-editor-screenshot-btn {
+  flex: 0 0 40px;
+  width: 40px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #777;
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms, transform 100ms, color 150ms;
+}
+
+.ai-editor-screenshot-btn:hover {
+  border-color: #bbb;
+  background: #fff;
+  color: #111;
+}
+
+.ai-editor-screenshot-btn:active {
+  transform: scale(0.97);
+}
+
+.ai-editor-screenshot-btn:disabled {
+  border-color: #e0e0e0;
+  background: #f3f3f3;
+  color: #c4c4c4;
+  cursor: default;
+  transform: none;
+}
+
+.ai-editor-screenshot-btn:disabled:hover {
+  border-color: #e0e0e0;
+  background: #f3f3f3;
+  color: #c4c4c4;
+}
+
+.ai-editor-screenshot-btn.ai-editor-screenshot-done {
+  border-color: #16a34a;
+  background: #16a34a;
+  color: #fff;
+}
+
+.ai-editor-screenshot-btn.ai-editor-screenshot-error {
+  border-color: #dc2626;
+  background: #dc2626;
+  color: #fff;
+}
+
+.ai-editor-save-btn {
+  flex: 0 0 auto;
+  min-width: 84px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms, transform 100ms, color 150ms;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.ai-editor-save-btn:hover {
+  border-color: #bbb;
+  background: #fff;
+  color: #111;
+}
+
+.ai-editor-save-btn:active {
+  transform: scale(0.98);
+}
+
+.ai-editor-save-btn:disabled {
+  color: #aaa;
+  cursor: default;
+  transform: none;
+}
+
+.ai-editor-save-btn.ai-editor-hidden {
+  display: none;
+}
+
+/* ── Shortcuts hint ─────────────────────────────────────── */
+.ai-editor-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 6px 10px;
+  font-size: 10px;
+  color: #999;
+}
+
+.ai-editor-shortcuts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.ai-editor-shortcuts kbd {
+  display: inline-block;
+  background: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 9px;
+  font-family: inherit;
+  color: #666;
+  line-height: 1.6;
+}
