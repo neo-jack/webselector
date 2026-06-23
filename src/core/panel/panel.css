@@ -1,0 +1,643 @@
+/* ── Reset ───────────────────────────────────────────────── */
+.ai-editor-settings-action { width:36px; height:36px; flex-shrink:0; display:grid; place-items:center; border:1px solid #deded8; border-radius:9px; background:#f5f5f1; color:#454e42; cursor:pointer; }
+.ai-editor-settings-action svg { width:16px; height:16px; }
+.ai-editor-root.ai-editor-chat { width:280px; border-radius:14px; }
+.ai-editor-root.ai-editor-settings { width:320px; max-width:calc(100vw - 16px); max-height:min(650px, 70vh); overflow-y:auto; }
+.ai-editor-connection { padding:8px 14px 12px; display:grid; gap:10px; color:#42483f; }
+.ai-editor-field { display:grid; gap:5px; font-size:11px; }
+.ai-editor-field input,.ai-editor-field select,.ai-editor-field textarea { width:100%; min-width:0; padding:8px; border:1px solid #dedfd8; border-radius:6px; background:#fafaf7; color:#263022; font-size:12px; }
+.ai-editor-connection button { border:1px solid #d9ddcf; border-radius:6px; padding:8px; background:#eff2e7; color:#34412a; cursor:pointer; font-size:12px; }
+.ai-editor-connection p { margin:0; font-size:11px; line-height:1.6; color:#6c7266; }
+.ai-editor-connection [data-preference-status] { position:absolute; top:15px; right:38px; max-width:calc(100% - 100px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; pointer-events:none; }
+.ai-editor-connection [data-preference-status][hidden] { display:none !important; }
+.ai-editor-connection button:disabled { opacity:.5; cursor:default; }
+.ai-editor-root,
+.ai-editor-root * {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  line-height: 1.4;
+}
+
+/* ── Chat panel ──────────────────────────────────────────── */
+.ai-editor-chat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483644;
+  width: 300px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 16px 32px -4px rgba(0, 0, 0, 0.11);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Drag handle ─────────────────────────────────────────── */
+.ai-editor-drag-handle {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background 120ms;
+  padding: 0 6px 0 12px;
+}
+
+.ai-editor-drag-handle:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.ai-editor-drag-handle:active {
+  cursor: grabbing;
+}
+
+.ai-editor-drag-title {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 500;
+  color: #bbb;
+  letter-spacing: 0.03em;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-editor-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  flex-shrink: 0;
+  transition: background 200ms;
+}
+
+.ai-editor-status-label {
+  color: #bbb;
+}
+
+.ai-editor-version {
+  color: #d8d8d8;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ── Pro (extension) variant ──────────────────────────────────
+   Restrained titanium-gray corner gradient + a faint inset top
+   highlight (hardware-panel feel) — perceptible but never loud.
+   Only applied when HOST.isExtension adds `.ai-editor-pro`; the
+   bookmarklet renders the plain white card unchanged. */
+.ai-editor-chat.ai-editor-pro {
+  background: linear-gradient(145deg, #ffffff 0%, #ffffff 40%, #f3f4f7 100%);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 16px 32px -4px rgba(0, 0, 0, 0.11);
+}
+
+/* Italic monospace "Pro" with a muted metal-gray text gradient,
+   replacing the version number in the Pro top bar. */
+.ai-editor-pro-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #444 0%, #888 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  user-select: none;
+}
+
+/* Pro top bar: a solid anodized-aluminium titanium-gray, with a precise
+   "machined seam" instead of a plain border — a top sharp highlight, a 1px
+   dark seam, and a faint bevel reflection below it. Reads as a finished
+   hardware panel; quietly apart from the free version's plain white. */
+.ai-editor-chat.ai-editor-pro .ai-editor-drag-handle {
+  background: #f5f6f8;
+  border-bottom: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+    inset 0 -2px 0 rgba(255, 255, 255, 0.6);
+}
+.ai-editor-chat.ai-editor-pro .ai-editor-drag-handle:hover {
+  background: #edf0f3;
+}
+.ai-editor-chat.ai-editor-pro .ai-editor-status-label {
+  color: #9a9a9a;
+}
+
+.ai-editor-panel-actions {
+  display: flex;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.ai-editor-panel-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: none;
+  color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 100ms, background 100ms;
+  padding: 0;
+}
+
+.ai-editor-panel-btn:hover {
+  color: #444;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ── Minimized state ─────────────────────────────────────── */
+.ai-editor-minimized {
+  width: auto !important;
+  min-width: 130px;
+}
+
+.ai-editor-minimized .ai-editor-drag-handle {
+  border-bottom: none;
+}
+
+/* ── Tags ────────────────────────────────────────────────── */
+.ai-editor-chat-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px 4px;
+}
+
+.ai-editor-chat-tags.ai-editor-hidden {
+  display: none;
+}
+
+.ai-editor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 2px 2px 8px;
+  background: #f5f5f5;
+  border: 1px solid #e8e8e8;
+  border-radius: 20px;
+  font-size: 11px;
+  color: #333;
+  max-width: 220px;
+  user-select: none;
+}
+
+.ai-editor-tag-num {
+  font-size: 10px;
+  color: #aaa;
+  flex-shrink: 0;
+  margin-right: 1px;
+}
+
+.ai-editor-tag-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Small thumbnail shown in a selection tag when the element is/contains an image. */
+.ai-editor-tag-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
+  margin-right: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.ai-editor-tag-x {
+  background: none;
+  border: none;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin-left: 1px;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: color 100ms, background 100ms;
+}
+
+.ai-editor-tag-x:hover {
+  color: #333;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ── Tags utility buttons ────────────────────────────────── */
+.ai-editor-tags-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 10px;
+  color: #999;
+  cursor: pointer;
+  transition: color 100ms, border-color 100ms, background 100ms;
+  white-space: nowrap;
+}
+
+.ai-editor-tags-action:hover {
+  color: #333;
+  border-color: #bbb;
+  background: #f5f5f5;
+}
+
+/* ── Settings panel ──────────────────────────────────────── */
+.ai-editor-settings {
+  position: fixed;
+  z-index: 2147483647;
+  width: 280px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 16px 32px -4px rgba(0, 0, 0, 0.12);
+  padding: 4px 0;
+  animation: ai-editor-settings-in 160ms cubic-bezier(0.2, 0, 0.1, 1) forwards;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+@keyframes ai-editor-settings-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ai-editor-settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 2px;
+}
+
+.ai-editor-settings-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.02em;
+  flex: 1;
+}
+
+.ai-editor-settings-close {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  color: #bbb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 100ms, background 100ms;
+}
+
+.ai-editor-settings-close:hover {
+  color: #444;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.ai-editor-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  gap: 10px;
+}
+
+.ai-editor-setting-row:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.ai-editor-setting-group-title {
+  margin: 8px 12px 2px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  color: #aaa;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ai-editor-settings-header + .ai-editor-setting-group-title {
+  margin-top: 4px;
+  padding-top: 0;
+  border-top: none;
+}
+
+@keyframes ai-editor-setting-flash {
+  0%   { background: rgba(37, 99, 235, 0.12); }
+  100% { background: transparent; }
+}
+
+.ai-editor-setting-flash {
+  animation: ai-editor-setting-flash 600ms ease forwards;
+}
+
+.ai-editor-setting-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-editor-setting-label-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.ai-editor-setting-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #222;
+}
+
+.ai-editor-setting-label-line .ai-editor-sharingan-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.ai-editor-setting-desc {
+  font-size: 10px;
+  color: #888;
+  line-height: 1.2;
+}
+
+/* ── Settings-panel cross-link (bookmarklet ⇄ Pro extension) ──
+   Deliberately quiet: a thin divider + muted text, matching the panel's
+   restrained palette. No card fill, no accent colour. */
+.ai-editor-settings-promo {
+  display: block;
+  margin: 6px 12px 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+}
+.ai-editor-settings-promo-title {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #555;
+  transition: color 120ms;
+}
+.ai-editor-settings-promo-desc {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+.ai-editor-settings-promo-cta {
+  display: inline-block;
+  font-size: 10px;
+  color: #777;
+  margin-top: 5px;
+  transition: color 120ms;
+}
+.ai-editor-settings-promo:hover .ai-editor-settings-promo-title,
+.ai-editor-settings-promo:hover .ai-editor-settings-promo-cta {
+  color: #222;
+}
+
+/* ── Small stroke icon shared by setting rows + the license label ── */
+.ai-editor-setting-icon {
+  width: 14px;
+  height: 14px;
+  color: #8a8a8a;
+  flex-shrink: 0;
+}
+
+/* ── License status block (extension; replaces the old popup window) ── */
+.ai-editor-settings-license {
+  margin: 6px 12px 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+.ai-editor-license-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ai-editor-license-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #555;
+}
+.ai-editor-license-state {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #888;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+}
+.ai-editor-license-state[data-state="active"] {
+  color: #2f8f4e;
+  background: rgba(47, 143, 78, 0.1);
+}
+.ai-editor-license-desc {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  line-height: 1.4;
+  margin-top: 5px;
+}
+.ai-editor-license-action {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 8px;
+  text-decoration: none;
+  transition: opacity 120ms;
+}
+.ai-editor-license-action:hover { opacity: 0.6; }
+
+/* ── Image → prompt result panel (⌘I) — anchored above the chat menu ── */
+.ai-editor-revprompt {
+  position: fixed;
+  z-index: 2147483647;
+  width: 320px;
+  max-width: calc(100vw - 16px);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 16px 32px -4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: ai-editor-settings-in 160ms cubic-bezier(0.2, 0, 0.1, 1) forwards;
+}
+.ai-editor-revprompt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.ai-editor-revprompt-title { font-size: 11px; font-weight: 600; color: #333; letter-spacing: 0.02em; }
+.ai-editor-revprompt-close {
+  width: 20px; height: 20px; border: none; background: none; color: #bbb;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; padding: 0; font-size: 15px; line-height: 1;
+  transition: color 100ms, background 100ms;
+}
+.ai-editor-revprompt-close:hover { color: #444; background: rgba(0, 0, 0, 0.06); }
+.ai-editor-revprompt-body { padding: 12px; }
+.ai-editor-revprompt-text {
+  font-size: 12px;
+  line-height: 1.65;
+  color: #2a2a2a;
+  max-height: 42vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
+.ai-editor-revprompt-err { font-size: 12px; color: #c0392b; padding: 4px 2px; }
+@keyframes ai-editor-rev-sheen {
+  0%   { background-position: 130% 0; }
+  100% { background-position: -30% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-editor-revprompt { animation: none; opacity: 1; transform: none; }
+  .ai-editor-revprompt-sheen { animation: none; }
+}
+
+/* ── Toggle switch ────────────────────────────────────────── */
+.ai-editor-toggle {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ai-editor-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ai-editor-toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #ddd;
+  border-radius: 17px;
+  transition: background 180ms;
+}
+
+.ai-editor-toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.ai-editor-toggle input:checked + .ai-editor-toggle-slider {
+  background: #111;
+}
+
+.ai-editor-toggle input:checked + .ai-editor-toggle-slider::before {
+  transform: translateX(13px);
+}
+
+/* ── Language button ──────────────────────────────────────── */
+.ai-editor-lang-btn {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background: #f8f8f8;
+  color: #444;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 100ms, border-color 100ms;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ai-editor-lang-btn:hover {
+  background: #eee;
+  border-color: #bbb;
+}
+
+
+.ai-editor-panel-btn.ai-editor-power { width: 28px; height: 16px; border-radius: 12px; background: #d1d1d1; padding: 2px; display: flex; justify-content: flex-start; }
+.ai-editor-power span { width: 12px; height: 12px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #0002; }
+.ai-editor-power[aria-checked="true"] { background: #111; }
+.ai-editor-power[aria-checked="true"] span { transform: translateX(12px); }
+.ai-editor-power:focus-visible { outline: 2px solid #888; outline-offset: 3px; }
+
+
+/* Exactly one Codex target; native attachment cards belong to the client. */
+.ai-editor-target-options { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 8px; max-height: 40vh; overflow-y: auto; font-size: 12px; }
+.ai-editor-target-option { display: inline-flex; flex: 0 1 auto; max-width: 100%; align-items: center; gap: 5px; min-height: 30px; margin: 0; padding: 5px 6px; color: #222; background: #fff; cursor: pointer; border-radius: 6px; }
+.ai-editor-target-option:has(input:checked) { background: #f2f2f2; }
+.ai-editor-target-option input { appearance: auto; flex: 0 0 14px; width: 14px; height: 14px; margin: 0; accent-color: #222; }
+.ai-editor-target-option > span { flex: 0 1 auto; min-width: 0; color: inherit; -webkit-text-fill-color: currentColor; overflow-wrap: anywhere; }
+.ai-editor-target-option small { flex: 0 1 auto; color: #666; margin-left: 0; overflow-wrap: anywhere; max-width: 90px; font-size: 10px; }
+.ai-editor-target-option small:empty { display: none; }
+.ai-editor-target-option:has(input:disabled) { color: #666; cursor: default; }
+
+/* Settings and selection switch share the primary action row. */
+.ai-editor-inline-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 0 2px; }
+.ai-editor-inline-controls .ai-editor-panel-btn { color: #666; }
+
+.ai-editor-chat .ai-editor-copy-btn.ai-editor-bridge-notice { background: #fff0f0; color: #c62828 !important; -webkit-text-fill-color: #c62828 !important; font-size: 12px; padding-inline: 6px; }
