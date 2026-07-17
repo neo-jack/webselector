@@ -1,0 +1,14 @@
+*
+!Dockerfile
+!nginx.conf
+!site/
+!site/index.html
+!site/assets/
+!site/assets/favicon.svg
+!site/assets/forest.svg
+!site/assets/demo.mp4
+!site/core/
+!site/core/index.js
+!site/core/dist/
+!site/core/dist/selector.js
+!site/core/dist/selector.css
