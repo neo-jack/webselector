@@ -2,6 +2,10 @@
 
 选择网页元素，复制带有样式、组件上下文和修改要求的提示词，粘贴到自己使用的 AI 工具。
 
+## 在线预览
+
+[打开 AItool · 界面元素选择器](https://www.lanbinquan.top/AItool/)
+
 ## 使用
 
 1. 打开安装页，将 AItool 链接拖到书签栏。
@@ -32,6 +36,5 @@ Figma 捕获的独立浏览器测试：npm run test:figma，需要可用的 Play
 - src/core/context：元素上下文和源码位置解析。
 - src/core/vendor：捕获依赖及来源、许可证。
 - scripts/preview.mjs：本地静态预览。
-- .github：静态站点构建与部署。
 
 安装页视频是历史演示，当前操作以复制后手动粘贴为准。保留上游 Selector 及第三方依赖的来源和许可说明。

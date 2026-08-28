@@ -6,7 +6,7 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/neo-jack/101my-agent.git"
+    "url": "https://github.com/neo-jack/webselector.git"
   },
   "scripts": {
     "build": "node src/core/build.js",

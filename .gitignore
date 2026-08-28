@@ -36,6 +36,7 @@ temp/
 .cache/
 
 # CI deployment artifact
+.github/
 .github/deploy/site/
 
 # Local maintenance and reference files
