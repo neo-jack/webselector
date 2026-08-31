@@ -37,4 +37,4 @@ Figma 捕获的独立浏览器测试：npm run test:figma，需要可用的 Play
 - src/core/vendor：捕获依赖及来源、许可证。
 - scripts/preview.mjs：本地静态预览。
 
-安装页视频是历史演示，当前操作以复制后手动粘贴为准。保留上游 Selector 及第三方依赖的来源和许可说明。
+保留上游 Selector 及第三方依赖的来源和许可说明。
